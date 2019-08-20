@@ -60,6 +60,7 @@ void setup() {
 void loop() {
 
   if (digitalRead(beginner) == LOW) {
+    
 #ifdef DEBUG
     Serial.print("Beginner Mode Activated \n");
 #endif
@@ -75,6 +76,7 @@ void loop() {
     mode_done = 1;
   }
   else if (digitalRead(moderate) == LOW) {
+    
 #ifdef DEBUG
     Serial.print("Moderate Mode Activated \n");
 #endif
@@ -90,6 +92,7 @@ void loop() {
     mode_done = 1;
   }
   else if (digitalRead(hard) == LOW) {
+    
 #ifdef DEBUG
     Serial.print("Hard Mode Activated \n");
 #endif
@@ -105,6 +108,7 @@ void loop() {
     mode_done = 1;
   }
   else if (digitalRead(expert) == LOW) {
+    
 #ifdef DEBUG
     Serial.print("Expert Mode Activated \n");
 #endif
@@ -120,9 +124,11 @@ void loop() {
     mode_done = 1;
   }
   else {
-#ifdef DEBUG
+    
+    #ifdef DEBUG
     Serial.print("No Mode Set! \n");
-#endif
+    #endif
+    
     mode_done = 0;
   }
 
@@ -133,158 +139,165 @@ void loop() {
       x = CENTER_X;
       digitalPotWriteX(x);
 
-#ifdef DEBUG
+      #ifdef DEBUG
       Serial.print("x is: ");
       Serial.print(x);
       Serial.print("\n");
-#endif
+      #endif
     }
     else if (digitalRead(Right) == LOW) {
-      if (x >= MAX_X) {
-        x = MAX_X;
+
+      if (prev_x == 2) {
+        x = CENTER_X;
         digitalPotWriteX(x);
-#ifdef DEBUG
+      }
+      if (MAX_X <= STEP_X + x) {
+        x = MAX_X;
+
+        #ifdef DEBUG
         Serial.print("x held at: ");
         Serial.print(x);
         Serial.print("\n");
-#endif
+        #endif
       }
       else {
-        if (prev_x == 2) {
-          x = CENTER_X;
-          digitalPotWriteX(x);
-        }
-        if (MAX_X - x < STEP_X) {
-          x = MAX_X;
-        }
-        else {
-          x += STEP_X;
-        }
-        digitalPotWriteX(x);
+        x += STEP_X;
 
-        prev_x = 1;
-#ifdef DEBUG
+        #ifdef DEBUG
         Serial.print("x changed to: ");
         Serial.print(x);
         Serial.print("\n");
-#endif
+        #endif
       }
+      digitalPotWriteX(x);
 
+      prev_x = 1;
     }
     else if (digitalRead(Left) == LOW) {
-      if (x <= MIN_X) {
-        x = MIN_X;
+
+      if (prev_x == 1) {
+        x = CENTER_X;
         digitalPotWriteX(x);
-#ifdef DEBUG
+      }
+      if (x - STEP_X <= MIN_X) {
+        x = MIN_X;
+
+        #ifdef DEBUG
         Serial.print("x held at: ");
         Serial.print(x);
         Serial.print("\n");
-#endif
+        #endif
       }
       else {
-        if (prev_x == 1) {
-          x = CENTER_X;
-          digitalPotWriteX(x);
-        }
-        if (x - MIN_X < STEP_X) {
-          x = MIN_X;
-        }
-        else {
-          x -= STEP_X;
-        }
-        digitalPotWriteX(x);
-
-        prev_x = 2;
-#ifdef DEBUG
+        x -= STEP_X;
+        
+        #ifdef DEBUG
         Serial.print("x changed to: ");
         Serial.print(x);
         Serial.print("\n");
-#endif
+        #endif
       }
+      digitalPotWriteX(x);
+
+      prev_x = 2;
+
     }
 
     if ((digitalRead(Up) == LOW && digitalRead(Down) == LOW) || (digitalRead(Up) == HIGH && digitalRead(Down) == HIGH))
     {
       y = CENTER_Y;
       digitalPotWriteY(y);
-#ifdef DEBUG
+      
+      #ifdef DEBUG
       Serial.print("y is: ");
       Serial.print(y);
       Serial.print("\n");
-#endif
+      #endif
 
     }
     else if (digitalRead(Up) == LOW) {
-      if (y >= MAX_Y) {
-        y = MAX_Y;
-        digitalPotWriteY(y);
-#ifdef DEBUG
-        Serial.print("y held at: ");
-        Serial.print(y);
-        Serial.print("\n");
-#endif
-      }
-      else {
         if (prev_y == 2) {
           y = CENTER_Y;
           digitalPotWriteY(y);
         }
-        y += STEP_Y;
+
+        if (y + STEP_Y >= MAX_Y)
+        {
+          y = MAX_Y;
+          
+          #ifdef DEBUG
+          Serial.print("y held at: ");
+          Serial.print(y);
+          Serial.print("\n");
+          #endif
+        }
+        else
+        {
+          y += STEP_Y;
+
+          #ifdef DEBUG
+          Serial.print("y changed to: ");
+          Serial.print(y);
+          Serial.print("\n");
+          #endif
+        }
         digitalPotWriteY(y);
 
         prev_y = 1;
-#ifdef DEBUG
-        Serial.print("y changed to: ");
-        Serial.print(y);
-        Serial.print("\n");
-#endif
+
+
       }
-    }
-    else if (digitalRead(Down) == LOW) {
-      if (y <= MIN_Y) {
-        y = MIN_Y;
-        digitalPotWriteY(y);
-#ifdef DEBUG
-        Serial.print("y held at: ");
-        Serial.print(y);
-        Serial.print("\n");
-#endif
-      }
-      else {
+      else if (digitalRead(Down) == LOW) {
         if (prev_y == 1) {
           y = CENTER_Y;
           digitalPotWriteY(y);
         }
-        y -= STEP_Y;
+
+        if (y - STEP_Y <= MIN_Y)
+        {
+          y = MIN_Y;
+
+          #ifdef DEBUG
+          Serial.print("y held at: ");
+          Serial.print(y);
+          Serial.print("\n");
+          #endif
+        }
+        else
+        {
+          y -= STEP_Y;
+          
+          #ifdef DEBUG
+          Serial.print("y changed to: ");
+          Serial.print(y);
+          Serial.print("\n");
+          #endif
+        }
         digitalPotWriteY(y);
 
         prev_y = 2;
-#ifdef DEBUG
-        Serial.print("y changed to: ");
-        Serial.print(y);
-        Serial.print("\n");
-#endif
-      }
-    }
 
-    delay(100);
+
+      }
+
+      delay(100);
+
+    }
 
   }
 
-}
+  int digitalPotWriteX(int valueX) {
+    digitalWrite(CS, LOW);
+    SPI.transfer(addressX);
+    int data = (float)valueX / MAX_X * 128.0;
+    SPI.transfer(data); //0 is 0ohm and 128 is 5kOhm. So we need to convert to our data values from the resistance values
+    digitalWrite(CS, HIGH);
+  }
 
-int digitalPotWriteX(int valueX) {
-  digitalWrite(CS, LOW);
-  SPI.transfer(addressX);
-  int data = (float)valueX / MAX_X * 128.0;
-  SPI.transfer(data); //0 is 0ohm and 128 is 5kOhm. So we need to convert to our data values from the resistance values
-  digitalWrite(CS, HIGH);
-}
-
-int digitalPotWriteY(int valueY) {
-  digitalWrite(CS, LOW);
-  SPI.transfer(addressY);
-  int data = (float)valueY / MAX_Y * 128.0; //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
-  SPI.transfer(data);
-  digitalWrite(CS, HIGH);
-}
+  int digitalPotWriteY(int valueY) {
+    digitalWrite(CS, LOW);
+    SPI.transfer(addressY);
+    int data = (float)valueY / MAX_Y * 128.0; //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
+    SPI.transfer(data);
+    digitalWrite(CS, HIGH);
+  }
