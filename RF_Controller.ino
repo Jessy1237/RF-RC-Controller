@@ -20,7 +20,7 @@ int expert = 5;
 
 // Green Wire = Common (Pin 8 on DIN 9)
 
-#define CENTER_X 2800
+#define CENTER_X 2600
 #define CENTER_Y 2100
 
 
@@ -33,14 +33,14 @@ int MIN_X = 0;
 
 int mode_done = 0;
 int x = CENTER_X;
-int y = CENTER_Y;   
+int y = CENTER_Y;
 int prev_x, prev_y = 0;
 
 void setup() {
 
-  #ifdef DEBUG
-    Serial.begin(9600);
-  #endif
+#ifdef DEBUG
+  Serial.begin(9600);
+#endif
 
   pinMode(Up, INPUT_PULLUP);
   pinMode(Down, INPUT_PULLUP);
@@ -59,9 +59,11 @@ void setup() {
 
 void loop() {
 
-  if (digitalRead(beginner) == LOW){
+  if (digitalRead(beginner) == LOW) {
+#ifdef DEBUG
     Serial.print("Beginner Mode Activated \n");
-    
+#endif
+
     STEP_Y = 25;
     MAX_Y = 2625;
     MIN_Y = 1625;
@@ -69,12 +71,14 @@ void loop() {
     STEP_X = 250;
     MAX_X = 3400;
     MIN_X = 2150;
-    
+
     mode_done = 1;
   }
-  else if (digitalRead(moderate) == LOW){
+  else if (digitalRead(moderate) == LOW) {
+#ifdef DEBUG
     Serial.print("Moderate Mode Activated \n");
-    
+#endif
+
     STEP_Y = 25;
     MAX_Y = 3150;
     MIN_Y = 1150;
@@ -82,12 +86,14 @@ void loop() {
     STEP_X = 250;
     MAX_X = 4000;
     MIN_X = 1500;
-    
+
     mode_done = 1;
   }
-  else if (digitalRead(hard) == LOW){
+  else if (digitalRead(hard) == LOW) {
+#ifdef DEBUG
     Serial.print("Hard Mode Activated \n");
-    
+#endif
+
     STEP_Y = 50;
     MAX_Y = 3675;
     MIN_Y = 675;
@@ -95,12 +101,14 @@ void loop() {
     STEP_X = 500;
     MAX_X = 4600;
     MIN_X = 850;
-    
+
     mode_done = 1;
   }
-  else if (digitalRead(expert) == LOW){
+  else if (digitalRead(expert) == LOW) {
+#ifdef DEBUG
     Serial.print("Expert Mode Activated \n");
-    
+#endif
+
     STEP_Y = 50;
     MAX_Y = 4200;
     MIN_Y = 200;
@@ -108,175 +116,175 @@ void loop() {
     STEP_X = 500;
     MAX_X = 5200;
     MIN_X = 200;
-    
+
     mode_done = 1;
   }
   else {
+#ifdef DEBUG
     Serial.print("No Mode Set! \n");
+#endif
     mode_done = 0;
   }
 
   if (mode_done == 1) {
-      //IF both are off then reset to centre, or if in error state and both are on then reset to centre
-      if ((digitalRead(Right) == LOW && digitalRead(Left) == LOW) || (digitalRead(Right) == HIGH && digitalRead(Left) == HIGH))
-      {
-        x = CENTER_X;
-        digitalPotWriteX(x);
-    
-        #ifdef DEBUG
-          Serial.print("x is: ");
-          Serial.print(x);
-          Serial.print("\n");
-        #endif
-      }
-      else if (digitalRead(Right) == LOW) {
-        if (x >= MAX_X) {
-          x = MAX_X;
-          digitalPotWriteX(x);
-          #ifdef DEBUG    
-            Serial.print("x held at: ");
-            Serial.print(x);
-            Serial.print("\n");
-          #endif
-        }
-        else {
-          if (prev_x == 2) {
-            x = CENTER_X;
-            digitalPotWriteX(x);
-          }
-          if (MAX_X - x < STEP_X) {
-            x = MAX_X;
-          }
-          else {
-            x += STEP_X;
-          }
-          digitalPotWriteX(x);
-    
-          prev_x = 1;
-          #ifdef DEBUG
-            Serial.print("x changed to: ");
-            Serial.print(x);
-            Serial.print("\n");
-          #endif
-        }
-    
-      }
-      else if (digitalRead(Left) == LOW) {
-        if (x <= MIN_X) {
-          x = MIN_X;
-          digitalPotWriteX(x);
-          #ifdef DEBUG    
-            Serial.print("x held at: ");
-            Serial.print(x);
-            Serial.print("\n");
-          #endif
-        }
-        else {
-          if (prev_x == 1) {
-            x = CENTER_X;
-            digitalPotWriteX(x);
-          }
-          if (x - MIN_X < STEP_X) {
-            x = MIN_X;
-          }
-          else {
-            x -= STEP_X;
-          }
-          digitalPotWriteX(x);
-    
-          prev_x = 2;
-          #ifdef DEBUG    
-            Serial.print("x changed to: ");
-            Serial.print(x);
-            Serial.print("\n");
-          #endif
-        }
-      }
-    
-      if ((digitalRead(Up) == LOW && digitalRead(Down) == LOW) || (digitalRead(Up) == HIGH && digitalRead(Down) == HIGH))
-      {
-        y = CENTER_Y;
-        digitalPotWriteY(y);
-        #ifdef DEBUG    
-          Serial.print("y is: ");
-          Serial.print(y);
-          Serial.print("\n");
-        #endif
-    
-      }
-      else if (digitalRead(Up) == LOW) {
-        if (y >= MAX_Y) {
-          y = MAX_Y;
-          digitalPotWriteY(y);
-          #ifdef DEBUG    
-            Serial.print("y held at: "); 
-            Serial.print(y);
-            Serial.print("\n");
-          #endif
-        }
-        else {
-          if (prev_y == 2) {
-            y = CENTER_Y;
-            digitalPotWriteY(y);
-          }
-          y += STEP_Y;
-          digitalPotWriteY(y);
-    
-          prev_y = 1;
-          #ifdef DEBUG    
-            Serial.print("y changed to: ");
-            Serial.print(y);
-            Serial.print("\n");
-          #endif
-        }
-      }
-      else if (digitalRead(Down) == LOW) {
-        if (y <= MIN_Y) {
-          y = MIN_Y;
-          digitalPotWriteY(y);
-          #ifdef DEBUG    
-            Serial.print("y held at: ");
-            Serial.print(y);
-            Serial.print("\n");
-          #endif
-        }
-        else {
-          if (prev_y == 1) {
-            y = CENTER_Y;
-            digitalPotWriteY(y);
-          }
-          y -= STEP_Y;
-          digitalPotWriteY(y);
-    
-          prev_y = 2;
-          #ifdef DEBUG    
-            Serial.print("y changed to: ");  
-            Serial.print(y);
-            Serial.print("\n");
-          #endif
-        }
-      }
-    
-      delay(100);
-    
+    //IF both are off then reset to centre, or if in error state and both are on then reset to centre
+    if ((digitalRead(Right) == LOW && digitalRead(Left) == LOW) || (digitalRead(Right) == HIGH && digitalRead(Left) == HIGH))
+    {
+      x = CENTER_X;
+      digitalPotWriteX(x);
+
+#ifdef DEBUG
+      Serial.print("x is: ");
+      Serial.print(x);
+      Serial.print("\n");
+#endif
     }
-    
+    else if (digitalRead(Right) == LOW) {
+      if (x >= MAX_X) {
+        x = MAX_X;
+        digitalPotWriteX(x);
+#ifdef DEBUG
+        Serial.print("x held at: ");
+        Serial.print(x);
+        Serial.print("\n");
+#endif
+      }
+      else {
+        if (prev_x == 2) {
+          x = CENTER_X;
+          digitalPotWriteX(x);
+        }
+        if (MAX_X - x < STEP_X) {
+          x = MAX_X;
+        }
+        else {
+          x += STEP_X;
+        }
+        digitalPotWriteX(x);
+
+        prev_x = 1;
+#ifdef DEBUG
+        Serial.print("x changed to: ");
+        Serial.print(x);
+        Serial.print("\n");
+#endif
+      }
+
+    }
+    else if (digitalRead(Left) == LOW) {
+      if (x <= MIN_X) {
+        x = MIN_X;
+        digitalPotWriteX(x);
+#ifdef DEBUG
+        Serial.print("x held at: ");
+        Serial.print(x);
+        Serial.print("\n");
+#endif
+      }
+      else {
+        if (prev_x == 1) {
+          x = CENTER_X;
+          digitalPotWriteX(x);
+        }
+        if (x - MIN_X < STEP_X) {
+          x = MIN_X;
+        }
+        else {
+          x -= STEP_X;
+        }
+        digitalPotWriteX(x);
+
+        prev_x = 2;
+#ifdef DEBUG
+        Serial.print("x changed to: ");
+        Serial.print(x);
+        Serial.print("\n");
+#endif
+      }
+    }
+
+    if ((digitalRead(Up) == LOW && digitalRead(Down) == LOW) || (digitalRead(Up) == HIGH && digitalRead(Down) == HIGH))
+    {
+      y = CENTER_Y;
+      digitalPotWriteY(y);
+#ifdef DEBUG
+      Serial.print("y is: ");
+      Serial.print(y);
+      Serial.print("\n");
+#endif
+
+    }
+    else if (digitalRead(Up) == LOW) {
+      if (y >= MAX_Y) {
+        y = MAX_Y;
+        digitalPotWriteY(y);
+#ifdef DEBUG
+        Serial.print("y held at: ");
+        Serial.print(y);
+        Serial.print("\n");
+#endif
+      }
+      else {
+        if (prev_y == 2) {
+          y = CENTER_Y;
+          digitalPotWriteY(y);
+        }
+        y += STEP_Y;
+        digitalPotWriteY(y);
+
+        prev_y = 1;
+#ifdef DEBUG
+        Serial.print("y changed to: ");
+        Serial.print(y);
+        Serial.print("\n");
+#endif
+      }
+    }
+    else if (digitalRead(Down) == LOW) {
+      if (y <= MIN_Y) {
+        y = MIN_Y;
+        digitalPotWriteY(y);
+#ifdef DEBUG
+        Serial.print("y held at: ");
+        Serial.print(y);
+        Serial.print("\n");
+#endif
+      }
+      else {
+        if (prev_y == 1) {
+          y = CENTER_Y;
+          digitalPotWriteY(y);
+        }
+        y -= STEP_Y;
+        digitalPotWriteY(y);
+
+        prev_y = 2;
+#ifdef DEBUG
+        Serial.print("y changed to: ");
+        Serial.print(y);
+        Serial.print("\n");
+#endif
+      }
+    }
+
+    delay(100);
+
   }
 
-  int digitalPotWriteX(int valueX) {
-    digitalWrite(CS, LOW);
-    SPI.transfer(addressX);
-    int data = (float)valueX/MAX_X*128.0;
-    SPI.transfer(data); //0 is 0ohm and 128 is 5kOhm. So we need to convert to our data values from the resistance values
-    digitalWrite(CS, HIGH);
-  }
-    
-  int digitalPotWriteY(int valueY) {     
-    digitalWrite(CS, LOW);
-    SPI.transfer(addressY);
-    int data = (float)valueY/MAX_Y*128.0; //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
-    SPI.transfer(data);
-    digitalWrite(CS, HIGH);
-  }
+}
 
- 
+int digitalPotWriteX(int valueX) {
+  digitalWrite(CS, LOW);
+  SPI.transfer(addressX);
+  int data = (float)valueX / MAX_X * 128.0;
+  SPI.transfer(data); //0 is 0ohm and 128 is 5kOhm. So we need to convert to our data values from the resistance values
+  digitalWrite(CS, HIGH);
+}
+
+int digitalPotWriteY(int valueY) {
+  digitalWrite(CS, LOW);
+  SPI.transfer(addressY);
+  int data = (float)valueY / MAX_Y * 128.0; //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
+  SPI.transfer(data);
+  digitalWrite(CS, HIGH);
+}
