@@ -11,7 +11,7 @@ int moderate = 7;
 int hard = 6;
 int expert = 5;
 
-#define DEBUG
+//#define DEBUG
 
 #define Up 3 // Yellow Wire (Pin 1 on DIN 9)
 #define Down A3 // Red Wire (Pin 2 on DIN 9)
@@ -22,6 +22,8 @@ int expert = 5;
 
 #define CENTER_X 2600
 #define CENTER_Y 2100
+#define ABS_MAX_X 5200
+#define ABS_MAX_Y 4200
 
 
 int STEP_Y = 0;
@@ -66,12 +68,12 @@ void loop() {
 #endif
 
     STEP_Y = 25;
-    MAX_Y = 2625;
-    MIN_Y = 1625;
+    MAX_Y = 2450;
+    MIN_Y = 1730;
 
-    STEP_X = 250;
-    MAX_X = 3400;
-    MIN_X = 2150;
+    STEP_X = 130;
+    MAX_X = 5200;
+    MIN_X = 200;
 
     mode_done = 1;
   }
@@ -82,12 +84,12 @@ void loop() {
 #endif
 
     STEP_Y = 25;
-    MAX_Y = 3150;
-    MIN_Y = 1150;
+    MAX_Y = 2600;
+    MIN_Y = 1650;
 
     STEP_X = 250;
-    MAX_X = 4000;
-    MIN_X = 1500;
+    MAX_X = 5200;
+    MIN_X = 200;
 
     mode_done = 1;
   }
@@ -98,12 +100,12 @@ void loop() {
 #endif
 
     STEP_Y = 50;
-    MAX_Y = 3675;
-    MIN_Y = 675;
+    MAX_Y = 3100;
+    MIN_Y = 1100;
 
-    STEP_X = 500;
-    MAX_X = 4600;
-    MIN_X = 850;
+    STEP_X = 380;
+    MAX_X = 5200;
+    MIN_X = 200;
 
     mode_done = 1;
   }
@@ -209,7 +211,7 @@ void loop() {
       digitalPotWriteY(y);
       
       #ifdef DEBUG
-      Serial.print("y is: ");
+      Serial.print("y is centred at: ");
       Serial.print(y);
       Serial.print("\n");
       #endif
@@ -219,6 +221,11 @@ void loop() {
         if (prev_y == 2) {
           y = CENTER_Y;
           digitalPotWriteY(y);
+          #ifdef DEBUG
+          Serial.print("y centre at: ");
+          Serial.print(y);
+          Serial.print("\n");
+          #endif
         }
 
         if (y + STEP_Y >= MAX_Y)
@@ -251,6 +258,11 @@ void loop() {
         if (prev_y == 1) {
           y = CENTER_Y;
           digitalPotWriteY(y);
+          #ifdef DEBUG
+          Serial.print("y centre at: ");
+          Serial.print(y);
+          Serial.print("\n");
+          #endif
         }
 
         if (y - STEP_Y <= MIN_Y)
@@ -277,7 +289,6 @@ void loop() {
 
         prev_y = 2;
 
-
       }
 
       delay(100);
@@ -289,7 +300,10 @@ void loop() {
   int digitalPotWriteX(int valueX) {
     digitalWrite(CS, LOW);
     SPI.transfer(addressX);
-    int data = (float)valueX / MAX_X * 128.0;
+    int data = int((float)valueX / ABS_MAX_X * 128.0);
+//    Serial.print("X Data value is: ");
+//    Serial.print(data);
+//    Serial.print("\n");
     SPI.transfer(data); //0 is 0ohm and 128 is 5kOhm. So we need to convert to our data values from the resistance values
     digitalWrite(CS, HIGH);
   }
@@ -297,7 +311,10 @@ void loop() {
   int digitalPotWriteY(int valueY) {
     digitalWrite(CS, LOW);
     SPI.transfer(addressY);
-    int data = (float)valueY / MAX_Y * 128.0; //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
+    int data = int((float)valueY / ABS_MAX_Y * 128.0); //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
+//    Serial.print("Y Data value is: ");
+//    Serial.print(data);
+//    Serial.print("\n");
     SPI.transfer(data);
     digitalWrite(CS, HIGH);
   }
