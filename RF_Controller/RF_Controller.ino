@@ -69,7 +69,7 @@ void loop() {
 
     STEP_Y = 25;
     MAX_Y = 2450;
-    MIN_Y = 1730;
+    MIN_Y = 1680;
 
     STEP_X = 130;
     MAX_X = 5200;
@@ -85,7 +85,7 @@ void loop() {
 
     STEP_Y = 25;
     MAX_Y = 2600;
-    MIN_Y = 1650;
+    MIN_Y = 1600;
 
     STEP_X = 250;
     MAX_X = 5200;
@@ -101,7 +101,7 @@ void loop() {
 
     STEP_Y = 50;
     MAX_Y = 3100;
-    MIN_Y = 1100;
+    MIN_Y = 1050;
 
     STEP_X = 380;
     MAX_X = 5200;
@@ -300,7 +300,7 @@ void loop() {
   int digitalPotWriteX(int valueX) {
     digitalWrite(CS, LOW);
     SPI.transfer(addressX);
-    int data = int((float)valueX / ABS_MAX_X * 128.0);
+    int data = (int)((float)valueX / (float)ABS_MAX_X * 128.0);
 //    Serial.print("X Data value is: ");
 //    Serial.print(data);
 //    Serial.print("\n");
@@ -311,7 +311,7 @@ void loop() {
   int digitalPotWriteY(int valueY) {
     digitalWrite(CS, LOW);
     SPI.transfer(addressY);
-    int data = int((float)valueY / ABS_MAX_Y * 128.0); //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
+    int data = (int)((float)valueY / (float)ABS_MAX_Y * 128.0); //Same as X but since we are using the Wiper to GND (instead of 5V to Wiper) of the pot resistor we need to inverse our resistance values
 //    Serial.print("Y Data value is: ");
 //    Serial.print(data);
 //    Serial.print("\n");
