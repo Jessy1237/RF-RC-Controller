@@ -20,7 +20,7 @@ int expert = 5;
 
 // Green Wire = Common (Pin 8 on DIN 9)
 
-#define CENTER_X 2600
+#define CENTER_X 2550
 #define CENTER_Y 2100
 #define ABS_MAX_X 5200
 #define ABS_MAX_Y 4200
@@ -68,10 +68,10 @@ void loop() {
 #endif
 
     STEP_Y = 25;
-    MAX_Y = 2450;
-    MIN_Y = 1680;
+    MAX_Y = 2470;
+    MIN_Y = 1720;
 
-    STEP_X = 130;
+    STEP_X = 500;
     MAX_X = 5200;
     MIN_X = 200;
 
@@ -85,9 +85,9 @@ void loop() {
 
     STEP_Y = 25;
     MAX_Y = 2600;
-    MIN_Y = 1600;
+    MIN_Y = 1650;
 
-    STEP_X = 250;
+    STEP_X = 380;
     MAX_X = 5200;
     MIN_X = 200;
 
@@ -101,9 +101,9 @@ void loop() {
 
     STEP_Y = 50;
     MAX_Y = 3100;
-    MIN_Y = 1050;
+    MIN_Y = 1350;
 
-    STEP_X = 380;
+    STEP_X = 250;
     MAX_X = 5200;
     MIN_X = 200;
 
