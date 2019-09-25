@@ -13,10 +13,10 @@ int expert = 5;
 
 //#define DEBUG
 
-#define Up 3 // Yellow Wire (Pin 1 on DIN 9)
-#define Down A3 // Red Wire (Pin 2 on DIN 9)
-#define Left A2 // Brown Wire (Pin 3 on DIN 9)
-#define Right A1 // Blue Wire (Pin 4 on DIN 9)
+#define Up A3 // Yellow Wire (Pin 1 on DIN 9)
+#define Down 3 // Red Wire (Pin 2 on DIN 9)
+#define Left A1 // Brown Wire (Pin 3 on DIN 9)
+#define Right A2 // Blue Wire (Pin 4 on DIN 9)
 
 // Green Wire = Common (Pin 8 on DIN 9)
 
@@ -68,8 +68,8 @@ void loop() {
 #endif
 
     STEP_Y = 25;
-    MAX_Y = 2470;
-    MIN_Y = 1720;
+    MAX_Y = 2520;
+    MIN_Y = 1670;
 
     STEP_X = 500;
     MAX_X = 5200;
